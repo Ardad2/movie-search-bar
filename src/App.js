@@ -32,9 +32,9 @@ export default function App() {
     },
   ]);
 
-  const [ratings, set_ratings] = useState([]);
+  const [currentRatings, setCurrentRatings] = useState([]);
   const [ratingsOpen, setRatingsOpen] = useState(false);
-  const courses = [
+  const ratings = [
     { id: 1, label: "Any rating" },
     { id: 2, label: "1 star" },
     { id: 3, label: "2 star" },
@@ -55,9 +55,9 @@ export default function App() {
     const choosen = event.target.checked;
 
     if (choosen) {
-      set_ratings([...ratings, courseId]);
+      setCurrentRatings([...currentRatings, courseId]);
     } else {
-      set_ratings(ratings.filter((id) => id !== courseId));
+      setCurrentRatings(currentRatings.filter((id) => id !== courseId));
     }
   };
 
@@ -83,14 +83,14 @@ export default function App() {
                                     ${ratingsOpen ? "show" : ""}`}
               aria-labelledby="multiSelectDropdown"
             >
-              {courses.map((option) => (
+              {currentRatings.map((option) => (
                 <Form.Check
                   className="custom-checkbox"
                   key={option.id}
                   type="checkbox"
                   id={`option_${option.id}`}
                   label={option.label}
-                  checked={ratings.includes(option.id)}
+                  checked={currentRatings.includes(option.id)}
                   onChange={courseChange}
                   value={option.id}
                 />
@@ -105,7 +105,9 @@ export default function App() {
           if (query === "") {
             return;
           } else if (movie.title.toLowerCase().includes(query.toLowerCase())) {
-            return movie;
+            if (movie.rating === 8.5) {
+              return movie;
+            }
           }
         })
         .map((movie) => (
