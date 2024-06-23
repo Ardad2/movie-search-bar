@@ -32,7 +32,7 @@ export default function App() {
     },
   ]);
 
-  const [currentRatings, setCurrentRatings] = useState([]);
+  const [currentRatings, setCurrentRatings] = useState([0]);
   const [ratingsOpen, setRatingsOpen] = useState(false);
   const ratings = [
     { id: 0, label: "Any rating" },
@@ -48,7 +48,7 @@ export default function App() {
     { id: 10, label: "10 star" },
   ];
 
-  const [currentCategories, setCurrentCategories] = useState([]);
+  const [currentCategories, setCurrentCategories] = useState();
   const [categoriesOpen, setCategoriesOpen] = useState(false);
 
   const categories = [
@@ -75,6 +75,17 @@ export default function App() {
       setCurrentRatings([...currentRatings, courseId]);
     } else {
       setCurrentRatings(currentRatings.filter((id) => id !== courseId));
+    }
+  };
+
+  const genreChange = (event) => {
+    const courseId = parseInt(event.target.value);
+    const choosen = event.target.checked;
+
+    if (choosen) {
+      setCurrentCategories([...currentCategories, courseId]);
+    } else {
+      setCurrentCategories(currentCategories.filter((id) => id !== courseId));
     }
   };
 
@@ -139,7 +150,7 @@ export default function App() {
                   id={`option_${option.id}`}
                   label={option.label}
                   checked={currentCategories.includes(option.id)}
-                  onChange={courseChange}
+                  onChange={genreChange}
                   value={option.id}
                 />
               ))}
@@ -152,7 +163,10 @@ export default function App() {
         .filter((movie) => {
           if (query === "") {
             return;
-          } else if (currentRatings.includes(Math.floor(movie.rating))) {
+          } else if (
+            currentRatings.includes(Math.floor(movie.rating)) ||
+            currentRatings.includes(0)
+          ) {
             if (movie.title.toLowerCase().includes(query.toLowerCase())) {
               return movie;
             }
