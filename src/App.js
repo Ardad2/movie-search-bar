@@ -35,21 +35,38 @@ export default function App() {
   const [currentRatings, setCurrentRatings] = useState([]);
   const [ratingsOpen, setRatingsOpen] = useState(false);
   const ratings = [
-    { id: 1, label: "Any rating", stars: -1 },
-    { id: 2, label: "1 star", stars: 1 },
-    { id: 3, label: "2 star", stars: 2 },
-    { id: 4, label: "3 star", stars: 3 },
-    { id: 5, label: "4 star", stars: 4 },
-    { id: 6, label: "5 star", stars: 5 },
-    { id: 7, label: "6 star", stars: 6 },
-    { id: 8, label: "7 star", stars: 7 },
-    { id: 9, label: "8 star", stars: 8 },
-    { id: 10, label: "9 star", stars: 9 },
-    { id: 11, label: "10 star", stars: 10 },
+    { id: 0, label: "Any rating" },
+    { id: 1, label: "1 star" },
+    { id: 2, label: "2 star" },
+    { id: 3, label: "3 star" },
+    { id: 4, label: "4 star" },
+    { id: 5, label: "5 star" },
+    { id: 6, label: "6 star" },
+    { id: 7, label: "7 star" },
+    { id: 8, label: "8 star" },
+    { id: 9, label: "9 star" },
+    { id: 10, label: "10 star" },
   ];
+
+  const [currentCategories, setCurrentCategories] = useState([]);
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
+
+  const categories = [
+    { id: 0, label: "Any genre" },
+    { id: 1, label: "Action" },
+    { id: 2, label: "Comedy" },
+    { id: 3, label: "Drama" },
+    { id: 4, label: "Thriller" },
+  ];
+
   const dropDownShow = () => {
     setRatingsOpen(!ratingsOpen);
   };
+
+  const dropDownShowGenre = () => {
+    setCategoriesOpen(!categoriesOpen);
+  };
+
   const courseChange = (event) => {
     const courseId = parseInt(event.target.value);
     const choosen = event.target.checked;
@@ -91,6 +108,37 @@ export default function App() {
                   id={`option_${option.id}`}
                   label={option.label}
                   checked={currentRatings.includes(option.id)}
+                  onChange={courseChange}
+                  value={option.id}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="categories-dropdown">
+          <button
+            className="custom-dropdown-toggle green-button"
+            type="button"
+            id="multiSelectDropdown"
+            onClick={dropDownShowGenre}
+          >
+            Genre
+          </button>
+          {categoriesOpen && (
+            <div
+              className={`custom-dropdown-menu  
+                                    ${categoriesOpen ? "show" : ""}`}
+              aria-labelledby="multiSelectDropdown"
+            >
+              {categories.map((option) => (
+                <Form.Check
+                  className="custom-checkbox"
+                  key={option.id}
+                  type="checkbox"
+                  id={`option_${option.id}`}
+                  label={option.label}
+                  checked={currentCategories.includes(option.id)}
                   onChange={courseChange}
                   value={option.id}
                 />
