@@ -35,17 +35,17 @@ export default function App() {
   const [currentRatings, setCurrentRatings] = useState([]);
   const [ratingsOpen, setRatingsOpen] = useState(false);
   const ratings = [
-    { id: 1, label: "Any rating" },
-    { id: 2, label: "1 star" },
-    { id: 3, label: "2 star" },
-    { id: 4, label: "3 star" },
-    { id: 5, label: "4 star" },
-    { id: 6, label: "5 star" },
-    { id: 7, label: "6 star" },
-    { id: 8, label: "7 star" },
-    { id: 9, label: "8 star" },
-    { id: 10, label: "9 star" },
-    { id: 11, label: "10 star" },
+    { id: 1, label: "Any rating", stars: -1 },
+    { id: 2, label: "1 star", stars: 1 },
+    { id: 3, label: "2 star", stars: 2 },
+    { id: 4, label: "3 star", stars: 3 },
+    { id: 5, label: "4 star", stars: 4 },
+    { id: 6, label: "5 star", stars: 5 },
+    { id: 7, label: "6 star", stars: 6 },
+    { id: 8, label: "7 star", stars: 7 },
+    { id: 9, label: "8 star", stars: 8 },
+    { id: 10, label: "9 star", stars: 9 },
+    { id: 11, label: "10 star", stars: 10 },
   ];
   const dropDownShow = () => {
     setRatingsOpen(!ratingsOpen);
@@ -83,7 +83,7 @@ export default function App() {
                                     ${ratingsOpen ? "show" : ""}`}
               aria-labelledby="multiSelectDropdown"
             >
-              {currentRatings.map((option) => (
+              {ratings.map((option) => (
                 <Form.Check
                   className="custom-checkbox"
                   key={option.id}
@@ -104,8 +104,8 @@ export default function App() {
         .filter((movie) => {
           if (query === "") {
             return;
-          } else if (movie.title.toLowerCase().includes(query.toLowerCase())) {
-            if (movie.rating === 8.5) {
+          } else if (currentRatings.includes(Math.floor(movie.rating))) {
+            if (movie.title.toLowerCase().includes(query.toLowerCase())) {
               return movie;
             }
           }
@@ -117,6 +117,14 @@ export default function App() {
             </p>
           </div>
         ))}
+      <div>
+        <p>Filtering for the ratings are: </p>
+        <ul>
+          {currentRatings.map((rating) => (
+            <li>{rating}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
