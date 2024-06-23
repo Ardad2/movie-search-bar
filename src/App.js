@@ -12,12 +12,12 @@ export default function App() {
     {
       title: "Focus",
       rating: 6.9,
-      catgory: "Comedy",
+      category: "Comedy",
     },
     {
       title: "The Lazarus Effect",
       rating: 6.4,
-      catgory: "Thriller",
+      category: "Thriller",
     },
     {
       title: "Everly",
@@ -38,7 +38,21 @@ export default function App() {
         onChange={(event) => setQuery(event.target.value)}
       />
 
-      <div>{query}</div>
+      {movies
+        .filter((movie) => {
+          if (query === "") {
+            return;
+          } else if (movie.title.toLowerCase().includes(query.toLowerCase())) {
+            return movie;
+          }
+        })
+        .map((movie) => (
+          <div key={movie.title}>
+            <p>
+              {movie.title}, {movie.rating}, {movie.category}
+            </p>
+          </div>
+        ))}
     </div>
   );
 }
