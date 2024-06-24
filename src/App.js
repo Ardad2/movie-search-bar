@@ -14,7 +14,7 @@ export default function App() {
     return (
       <div>
         {[...new Array(totalStars)].map((arr, index) => {
-          return index < activeStars && activeStars - index < 1 ? (
+          return index < activeStars && activeStars - index <= 0.75 ? (
             <StarHalfIcon />
           ) : index < activeStars ? (
             <StarIcon />
