@@ -100,80 +100,96 @@ export default function App() {
 
   return (
     <div className="App">
-      <div className="Everything">
-        <input
-          placeholder="Enter movie Title"
-          onChange={(event) => setQuery(event.target.value)}
-        />
+      <div className="Main">
+        <div className="searchBar">
+          <div className="moviesBar">
+            <input
+              placeholder="Enter movie Title"
+              onChange={(event) => setQuery(event.target.value)}
+            />
 
-        <div>
-          <button type="button" id="multiSelectDropdown" onClick={dropDownShow}>
-            Ratings
-          </button>
-          {ratingsOpen && (
-            <div aria-labelledby="multiSelectDropdown">
-              {ratings.map((option) => (
-                <Form.Check
-                  key={option.id}
-                  type="checkbox"
-                  id={`option_${option.id}`}
-                  label={option.label}
-                  checked={currentRatings.includes(option.id)}
-                  onChange={ratingChange}
-                  value={option.id}
-                />
-              ))}
+            <div className="moviesList">
+              {movies
+                .filter((movie) => {
+                  if (query === "") {
+                    return;
+                  } else if (
+                    (currentRatings.includes(Math.floor(movie.rating)) ||
+                      currentRatings.includes(0)) &&
+                    (currentCategories.includes(
+                      categoriesMap.get(movie.category),
+                    ) ||
+                      currentCategories.includes(0))
+                  ) {
+                    if (
+                      movie.title.toLowerCase().includes(query.toLowerCase())
+                    ) {
+                      return movie;
+                    }
+                  }
+                })
+                .map((movie) => (
+                  <div key={movie.title}>
+                    <p>
+                      {movie.title}, {movie.rating}, {movie.category}
+                    </p>
+                  </div>
+                ))}
             </div>
-          )}
+          </div>
+
+          <div className="Ratings">
+            <button
+              className="dropDownButton"
+              type="button"
+              id="multiSelectDropdown"
+              onClick={dropDownShow}
+            >
+              Ratings
+            </button>
+            {ratingsOpen && (
+              <div aria-labelledby="multiSelectDropdown">
+                {ratings.map((option) => (
+                  <Form.Check
+                    key={option.id}
+                    type="checkbox"
+                    id={`option_${option.id}`}
+                    label={option.label}
+                    checked={currentRatings.includes(option.id)}
+                    onChange={ratingChange}
+                    value={option.id}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="Genres">
+            <button
+              className="dropDownButton"
+              type="button"
+              id="multiSelectDropdown"
+              onClick={dropDownShowGenre}
+            >
+              Genres
+            </button>
+            {categoriesOpen && (
+              <div aria-labelledby="multiSelectDropdown">
+                {categories.map((option) => (
+                  <Form.Check
+                    key={option.id}
+                    type="checkbox"
+                    id={`option_${option.id}`}
+                    label={option.label}
+                    checked={currentCategories.includes(option.id)}
+                    onChange={genreChange}
+                    value={option.id}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-
-        <div>
-          <button
-            type="button"
-            id="multiSelectDropdown"
-            onClick={dropDownShowGenre}
-          >
-            Genres
-          </button>
-          {categoriesOpen && (
-            <div aria-labelledby="multiSelectDropdown">
-              {categories.map((option) => (
-                <Form.Check
-                  key={option.id}
-                  type="checkbox"
-                  id={`option_${option.id}`}
-                  label={option.label}
-                  checked={currentCategories.includes(option.id)}
-                  onChange={genreChange}
-                  value={option.id}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-
-        {movies
-          .filter((movie) => {
-            if (query === "") {
-              return;
-            } else if (
-              (currentRatings.includes(Math.floor(movie.rating)) ||
-                currentRatings.includes(0)) &&
-              (currentCategories.includes(categoriesMap.get(movie.category)) ||
-                currentCategories.includes(0))
-            ) {
-              if (movie.title.toLowerCase().includes(query.toLowerCase())) {
-                return movie;
-              }
-            }
-          })
-          .map((movie) => (
-            <div key={movie.title}>
-              <p>
-                {movie.title}, {movie.rating}, {movie.category}
-              </p>
-            </div>
-          ))}
       </div>
     </div>
   );
