@@ -2,3 +2,8 @@
   font-family: sans-serif;
   text-align: center;
 }
+
+.Everything {
+  display: flex;
+  align-items: center;
+}

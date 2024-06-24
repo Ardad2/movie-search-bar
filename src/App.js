@@ -23,12 +23,12 @@ export default function App() {
     {
       title: "Everly",
       rating: 5.0,
-      catgory: "Action",
+      category: "Action",
     },
     {
       title: "Maps to the Stars",
       rating: 7.5,
-      catgory: "Drama",
+      category: "Drama",
     },
   ]);
 
@@ -48,7 +48,7 @@ export default function App() {
     { id: 10, label: "10 star" },
   ];
 
-  const [currentCategories, setCurrentCategories] = useState();
+  const [currentCategories, setCurrentCategories] = useState([0]);
   const [categoriesOpen, setCategoriesOpen] = useState(false);
 
   const categories = [
@@ -59,6 +59,14 @@ export default function App() {
     { id: 4, label: "Thriller" },
   ];
 
+  const categoriesMap = new Map();
+
+  categoriesMap.set("Any genre", 0);
+  categoriesMap.set("Action", 1);
+  categoriesMap.set("Comedy", 2);
+  categoriesMap.set("Drama", 3);
+  categoriesMap.set("Thriller", 4);
+
   const dropDownShow = () => {
     setRatingsOpen(!ratingsOpen);
   };
@@ -66,15 +74,16 @@ export default function App() {
   const dropDownShowGenre = () => {
     setCategoriesOpen(!categoriesOpen);
   };
-
-  const courseChange = (event) => {
-    const courseId = parseInt(event.target.value);
+  const ratingChange = (event) => {
+    const ratingID = parseInt(event.target.value);
     const choosen = event.target.checked;
 
+    setCurrentRatings(currentRatings.filter((id) => id != 0));
+
     if (choosen) {
-      setCurrentRatings([...currentRatings, courseId]);
+      setCurrentRatings([...currentRatings, ratingID]);
     } else {
-      setCurrentRatings(currentRatings.filter((id) => id !== courseId));
+      setCurrentRatings(currentRatings.filter((id) => id !== ratingID));
     }
   };
 
@@ -91,35 +100,26 @@ export default function App() {
 
   return (
     <div className="App">
-      <div className="filters">
+      <div className="Everything">
         <input
           placeholder="Enter movie Title"
           onChange={(event) => setQuery(event.target.value)}
         />
-        <div className="custom-dropdown">
-          <button
-            className="custom-dropdown-toggle green-button"
-            type="button"
-            id="multiSelectDropdown"
-            onClick={dropDownShow}
-          >
+
+        <div>
+          <button type="button" id="multiSelectDropdown" onClick={dropDownShow}>
             Ratings
           </button>
           {ratingsOpen && (
-            <div
-              className={`custom-dropdown-menu  
-                                    ${ratingsOpen ? "show" : ""}`}
-              aria-labelledby="multiSelectDropdown"
-            >
+            <div aria-labelledby="multiSelectDropdown">
               {ratings.map((option) => (
                 <Form.Check
-                  className="custom-checkbox"
                   key={option.id}
                   type="checkbox"
                   id={`option_${option.id}`}
                   label={option.label}
                   checked={currentRatings.includes(option.id)}
-                  onChange={courseChange}
+                  onChange={ratingChange}
                   value={option.id}
                 />
               ))}
@@ -127,24 +127,18 @@ export default function App() {
           )}
         </div>
 
-        <div className="categories-dropdown">
+        <div>
           <button
-            className="custom-dropdown-toggle green-button"
             type="button"
             id="multiSelectDropdown"
             onClick={dropDownShowGenre}
           >
-            Genre
+            Genres
           </button>
           {categoriesOpen && (
-            <div
-              className={`custom-dropdown-menu  
-                                    ${categoriesOpen ? "show" : ""}`}
-              aria-labelledby="multiSelectDropdown"
-            >
+            <div aria-labelledby="multiSelectDropdown">
               {categories.map((option) => (
                 <Form.Check
-                  className="custom-checkbox"
                   key={option.id}
                   type="checkbox"
                   id={`option_${option.id}`}
@@ -157,35 +151,29 @@ export default function App() {
             </div>
           )}
         </div>
-      </div>
 
-      {movies
-        .filter((movie) => {
-          if (query === "") {
-            return;
-          } else if (
-            currentRatings.includes(Math.floor(movie.rating)) ||
-            currentRatings.includes(0)
-          ) {
-            if (movie.title.toLowerCase().includes(query.toLowerCase())) {
-              return movie;
+        {movies
+          .filter((movie) => {
+            if (query === "") {
+              return;
+            } else if (
+              (currentRatings.includes(Math.floor(movie.rating)) ||
+                currentRatings.includes(0)) &&
+              (currentCategories.includes(categoriesMap.get(movie.category)) ||
+                currentCategories.includes(0))
+            ) {
+              if (movie.title.toLowerCase().includes(query.toLowerCase())) {
+                return movie;
+              }
             }
-          }
-        })
-        .map((movie) => (
-          <div key={movie.title}>
-            <p>
-              {movie.title}, {movie.rating}, {movie.category}
-            </p>
-          </div>
-        ))}
-      <div>
-        <p>Filtering for the ratings are: </p>
-        <ul>
-          {currentRatings.map((rating) => (
-            <li>{rating}</li>
+          })
+          .map((movie) => (
+            <div key={movie.title}>
+              <p>
+                {movie.title}, {movie.rating}, {movie.category}
+              </p>
+            </div>
           ))}
-        </ul>
       </div>
     </div>
   );
