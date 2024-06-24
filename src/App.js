@@ -2,8 +2,8 @@ import "./styles.css";
 import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 
-import Box from "@mui/material/Box";
 import StarIcon from "@mui/icons-material/Star";
+import StarHalfIcon from "@mui/icons-material/StarHalf";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 
 export default function App() {
@@ -14,7 +14,13 @@ export default function App() {
     return (
       <div>
         {[...new Array(totalStars)].map((arr, index) => {
-          return index < activeStars ? <StarIcon /> : <StarBorderIcon />;
+          return index < activeStars && activeStars - index < 1 ? (
+            <StarHalfIcon />
+          ) : index < activeStars ? (
+            <StarIcon />
+          ) : (
+            <StarBorderIcon />
+          );
         })}
       </div>
     );
@@ -119,12 +125,11 @@ export default function App() {
       if (genreID == 0) {
         setCurrentCategories([
           ...currentCategories.filter((id) => id == -1),
-          genreID,
+          0,
         ]);
       } else {
         setCurrentCategories([
-          ...currentCategories,
-          filter((id) => id !== genreID),
+          ...currentCategories.filter((id) => id !== 0),
           genreID,
         ]);
       }
