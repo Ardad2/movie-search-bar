@@ -2,7 +2,24 @@ import "./styles.css";
 import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 
+import Box from "@mui/material/Box";
+import StarIcon from "@mui/icons-material/Star";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+
 export default function App() {
+  const starGenerate = (rating) => {
+    const totalStars = 10;
+    const activeStars = rating;
+
+    return (
+      <div>
+        {[...new Array(totalStars)].map((arr, index) => {
+          return index < activeStars ? <StarIcon /> : <StarBorderIcon />;
+        })}
+      </div>
+    );
+  };
+
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([
     {
@@ -36,16 +53,16 @@ export default function App() {
   const [ratingsOpen, setRatingsOpen] = useState(false);
   const ratings = [
     { id: 0, label: "Any rating" },
-    { id: 1, label: "1 star" },
-    { id: 2, label: "2 star" },
-    { id: 3, label: "3 star" },
-    { id: 4, label: "4 star" },
-    { id: 5, label: "5 star" },
-    { id: 6, label: "6 star" },
-    { id: 7, label: "7 star" },
-    { id: 8, label: "8 star" },
-    { id: 9, label: "9 star" },
-    { id: 10, label: "10 star" },
+    { id: 1, label: "*.          *********" },
+    { id: 2, label: "*.          *********" },
+    { id: 3, label: "*.          *********" },
+    { id: 4, label: "*.          *********" },
+    { id: 5, label: "*.          *********" },
+    { id: 6, label: "*.          *********" },
+    { id: 7, label: "*.          *********" },
+    { id: 8, label: "*.          *********" },
+    { id: 9, label: "*.          *********" },
+    { id: 10, label: "*.          *********" },
   ];
 
   const [currentCategories, setCurrentCategories] = useState([0]);
@@ -68,77 +85,101 @@ export default function App() {
   categoriesMap.set("Thriller", 4);
 
   const dropDownShow = () => {
+    setCategoriesOpen(false);
     setRatingsOpen(!ratingsOpen);
   };
 
   const dropDownShowGenre = () => {
+    setRatingsOpen(false);
     setCategoriesOpen(!categoriesOpen);
   };
   const ratingChange = (event) => {
     const ratingID = parseInt(event.target.value);
     const choosen = event.target.checked;
 
-    setCurrentRatings(currentRatings.filter((id) => id != 0));
-
     if (choosen) {
-      setCurrentRatings([...currentRatings, ratingID]);
+      if (ratingID == 0) {
+        setCurrentRatings([...currentRatings.filter((id) => id == -1), 0]);
+      } else {
+        setCurrentRatings([
+          ...currentRatings.filter((id) => id !== 0),
+          ratingID,
+        ]);
+      }
     } else {
       setCurrentRatings(currentRatings.filter((id) => id !== ratingID));
     }
   };
 
   const genreChange = (event) => {
-    const courseId = parseInt(event.target.value);
+    const genreID = parseInt(event.target.value);
     const choosen = event.target.checked;
 
     if (choosen) {
-      setCurrentCategories([...currentCategories, courseId]);
+      if (genreID == 0) {
+        setCurrentCategories([
+          ...currentCategories.filter((id) => id == -1),
+          genreID,
+        ]);
+      } else {
+        setCurrentCategories([
+          ...currentCategories,
+          filter((id) => id !== genreID),
+          genreID,
+        ]);
+      }
     } else {
-      setCurrentCategories(currentCategories.filter((id) => id !== courseId));
+      setCurrentCategories(currentCategories.filter((id) => id !== genreID));
     }
   };
 
   return (
     <div className="App">
       <div className="Main">
-        <div className="searchBar">
-          <div className="moviesBar">
+        <div className="Search">
+          <div className="searchInput">
             <input
               placeholder="Enter movie Title"
               onChange={(event) => setQuery(event.target.value)}
             />
-
-            <div className="moviesList">
-              {movies
-                .filter((movie) => {
-                  if (query === "") {
-                    return;
-                  } else if (
-                    (currentRatings.includes(Math.floor(movie.rating)) ||
-                      currentRatings.includes(0)) &&
-                    (currentCategories.includes(
-                      categoriesMap.get(movie.category),
-                    ) ||
-                      currentCategories.includes(0))
-                  ) {
-                    if (
-                      movie.title.toLowerCase().includes(query.toLowerCase())
-                    ) {
-                      return movie;
-                    }
-                  }
-                })
-                .map((movie) => (
-                  <div key={movie.title}>
-                    <p>
-                      {movie.title}, {movie.rating}, {movie.category}
-                    </p>
-                  </div>
-                ))}
-            </div>
+            {/* Closing SearchInput */}
           </div>
 
-          <div className="Ratings">
+          <div className="moviesDropDown">
+            {movies
+              .filter((movie) => {
+                if (query === "") {
+                  return;
+                } else if (
+                  (currentRatings.includes(Math.floor(movie.rating)) ||
+                    currentRatings.includes(0)) &&
+                  (currentCategories.includes(
+                    categoriesMap.get(movie.category),
+                  ) ||
+                    currentCategories.includes(0))
+                ) {
+                  if (movie.title.toLowerCase().includes(query.toLowerCase())) {
+                    return movie;
+                  }
+                }
+              })
+              .map((movie) => (
+                <div className="movieItem" key={movie.title}>
+                  <div className="movieItemTitle">
+                    <p>{movie.title}</p>
+                    <p className="GreyText">{movie.category}</p>
+                  </div>
+                  {starGenerate(movie.rating)}
+                </div>
+              ))}
+          </div>
+        </div>
+        {/* Closing Movies List */}
+
+        {/* Closing Movies Bar */}
+
+        <div className="FilterArea">
+          <div className="RatingArea">
             <button
               className="dropDownButton"
               type="button"
@@ -147,24 +188,32 @@ export default function App() {
             >
               Ratings
             </button>
-            {ratingsOpen && (
-              <div aria-labelledby="multiSelectDropdown">
-                {ratings.map((option) => (
-                  <Form.Check
-                    key={option.id}
-                    type="checkbox"
-                    id={`option_${option.id}`}
-                    label={option.label}
-                    checked={currentRatings.includes(option.id)}
-                    onChange={ratingChange}
-                    value={option.id}
-                  />
-                ))}
-              </div>
-            )}
+            <div class>
+              {ratingsOpen && (
+                <div
+                  aria-labelledby="multiSelectDropdown"
+                  className="filterDropDown"
+                >
+                  {ratings.map((option) => (
+                    <div className="RatingCheckboxes">
+                      <Form.Check
+                        key={option.id}
+                        type="checkbox"
+                        id={`option_${option.id}`}
+                        label={option.id == 0 ? "Any rating" : ""}
+                        checked={currentRatings.includes(option.id)}
+                        onChange={ratingChange}
+                        value={option.id}
+                      />
+                      <div>{option.id == 0 ? "" : starGenerate(option.id)}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
-          <div className="Genres">
+          <div className="CategoryArea">
             <button
               className="dropDownButton"
               type="button"
@@ -174,7 +223,10 @@ export default function App() {
               Genres
             </button>
             {categoriesOpen && (
-              <div aria-labelledby="multiSelectDropdown">
+              <div
+                aria-labelledby="multiSelectDropdown"
+                className="filterDropDown"
+              >
                 {categories.map((option) => (
                   <Form.Check
                     key={option.id}
@@ -188,9 +240,12 @@ export default function App() {
                 ))}
               </div>
             )}
+            {/* Closing Genres */}
+            {/* Closing Main */}
           </div>
         </div>
       </div>
+      {/* Closing App */}
     </div>
   );
 }
