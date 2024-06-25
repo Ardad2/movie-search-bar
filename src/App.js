@@ -276,14 +276,16 @@ export default function App() {
           {/* This divsion contains the drop down button and menu for the ratings filter.*/}
 
           <div className="RatingArea">
-            <button
-              className="dropDownButton"
-              type="button"
-              id="multiSelectDropdown"
-              onClick={dropDownShow("ratings")}
-            >
-              Ratings
-            </button>
+            <div>
+              <button
+                className="dropDownButton"
+                type="button"
+                id="multiSelectDropdown"
+                onClick={dropDownShow("ratings")}
+              >
+                Ratings <div className={`arrow ${ratingsOpen ? "open" : ""}`} />
+              </button>
+            </div>
 
             {/* Whenever the button is clicked, the dropdown menu with options for the ratings will be toggled.*/}
             <div>
@@ -321,7 +323,7 @@ export default function App() {
               id="multiSelectDropdown"
               onClick={dropDownShow("categories")}
             >
-              Genres
+              Genres <div className={`arrow ${categoriesOpen ? "open" : ""}`} />
             </button>
             {categoriesOpen && (
               <div
