@@ -274,7 +274,11 @@ export default function App() {
           {/* Closing Search */}
         </div>
 
+        {/* The filtering options (for the Ratings and Genres) are contained in this divison*/}
+
         <div className="FilterArea">
+          {/* This divsion contains the drop down button and menu for the ratings filter.*/}
+
           <div className="RatingArea">
             <button
               className="dropDownButton"
@@ -284,6 +288,8 @@ export default function App() {
             >
               Ratings
             </button>
+
+            {/* Whenever the button is clicked, the dropdown menu with options for the ratings will be toggled.*/}
             <div>
               {ratingsOpen && (
                 <div
@@ -309,6 +315,8 @@ export default function App() {
             </div>
             {/* Closing RatingArea */}
           </div>
+
+          {/* This has almost the same implementation as the RatingsArea.*/}
 
           <div className="CategoryArea">
             <button
