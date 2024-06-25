@@ -8,14 +8,18 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 
 export default function App() {
   //Function which represents a given rating in terms of stars.
+
   const starGenerate = (rating) => {
     const totalStars = 10;
     const activeStars = rating;
 
     return (
       <div>
-        {[...new Array(totalStars)].map((arr, index) => {
-          return index < activeStars && activeStars - index <= 0.75 ? (
+        {/*. Iteratively, create a star for each number of the rating. 
+        Check if the remaining is less than 1.0, and in that case decide whether
+        to use half star or not. */}
+        {[...new Array(totalStars)].map((index) => {
+          return checkPartialStars(index, activeStars) ? (
             <StarHalfIcon />
           ) : index < activeStars ? (
             <StarIcon />
@@ -25,6 +29,14 @@ export default function App() {
         })}
       </div>
     );
+  };
+
+  /*Check if the remaining part of last star of the rating is less than 0.75.
+    If it is less than 0.75 we will need half star, otherwise round up to full star.
+  */
+
+  const checkPartialStars = (index, activeStars) => {
+    return index < activeStars && activeStars - index <= 0.75;
   };
 
   //State to store the current searched query.
@@ -192,6 +204,30 @@ export default function App() {
     }
   };
 
+  /*Check if the given rating is included under the current filter. 
+  If the rating ID of "0" is included it means that the filter has "Any Rating", 
+  and it is included by default. Otherwise check if the filter array contains this rating.
+   */
+
+  const containsRatingFilter = (rating) => {
+    return (
+      currentRatings.includes(Math.floor(movie.rating)) ||
+      currentRatings.includes(0)
+    );
+  };
+
+  /*Check if the given category is included under the current filter. 
+  If the category ID of "0" is included it means that the filter has "Any Category", 
+  and it is included by default. Otherwise check if the filter array contains this category.
+   */
+
+  const containsCategoryFilter = (category) => {
+    return (
+      currentRatings.includes(Math.floor(movie.category)) ||
+      currentRatings.includes(0)
+    );
+  };
+
   return (
     <div className="App">
       <div className="Main">
@@ -204,24 +240,26 @@ export default function App() {
             {/* Closing SearchInput */}
           </div>
 
+          {/* This function filters the movie list, first checking whether the chosen ratings and category filters are satisfied. 
+          After this is done, the title of the movie is chekced for a match, and if true it is returned.*/}
+
           <div className="moviesDropDown">
             {movies
               .filter((movie) => {
                 if (query === "") {
                   return;
                 } else if (
-                  (currentRatings.includes(Math.floor(movie.rating)) ||
-                    currentRatings.includes(0)) &&
-                  (currentCategories.includes(
-                    categoriesMap.get(movie.category),
-                  ) ||
-                    currentCategories.includes(0))
+                  containsRatingFilter(movie.rating) &&
+                  containsCategoryFilter(movie.category)
                 ) {
                   if (movie.title.toLowerCase().includes(query.toLowerCase())) {
                     return movie;
                   }
                 }
               })
+
+              // After filtering the movies, now display the matching movies.
+
               .map((movie) => (
                 <div className="movieItem" key={movie.title}>
                   <div className="movieItemTitle">
@@ -231,11 +269,10 @@ export default function App() {
                   {starGenerate(movie.rating)}
                 </div>
               ))}
+            {/* Closing moviesDropDown */}
           </div>
+          {/* Closing Search */}
         </div>
-        {/* Closing Movies List */}
-
-        {/* Closing Movies Bar */}
 
         <div className="FilterArea">
           <div className="RatingArea">
@@ -270,6 +307,7 @@ export default function App() {
                 </div>
               )}
             </div>
+            {/* Closing RatingArea */}
           </div>
 
           <div className="CategoryArea">
@@ -299,12 +337,13 @@ export default function App() {
                 ))}
               </div>
             )}
-            {/* Closing Genres */}
-            {/* Closing Main */}
+            {/* Closing CategoryArea */}
           </div>
+          {/* Closing FilterArea */}
         </div>
+        {/* Closing "Main"*/}
       </div>
-      {/* Closing App */}
+      {/* Closing "App"*/}
     </div>
   );
 }
