@@ -3,100 +3,10 @@
   text-align: center;
 }
 
-/*
-  display: block;
-  display: none;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-  margin-top: -1px;
-  max-height: 200px;
-  overflow-y: auto;
-  position: absolute;
-  top: 100%;
-  width: 100%;
-  z-index: 1000;
-  -webkit-overflow-scrolling: touch;
-
-*/
-
 .Main {
   display: flex;
   gap: 20px;
   margin: 20px;
-}
-
-.FilterArea {
-  display: flex;
-  gap: 3.125vw;
-  width: 25vw;
-}
-
-/*
-
-  display: block;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
-  box-sizing: border-box;
-  margin-top: -1px;
-  text-align: left;
-  overflow-y: auto;
-  position: absolute;
-
-*/
-
-.filterDropDown {
-  position: absolute;
-  align-self: left;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  width: full;
-  padding: 10px;
-  text-align: left;
-  margin-top: 10px;
-}
-
-.GreyText {
-  color: grey;
-}
-
-.moviesDropDown {
-  display: block;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
-  box-sizing: border-box;
-  margin-top: 10px;
-  overflow-y: auto;
-  position: absolute;
-  top: 100%;
-  width: 100%;
-  z-index: 1000;
-}
-
-.RatingCheckboxes {
-  display: flex;
-}
-
-.movieItem:hover {
-  background-color: #f2f9fc;
-  color: #333;
-}
-
-.movieItem {
-  margin: 10px;
-  display: block;
-  text-align: left;
-}
-
-.movieItemTitle {
-  display: flex;
-  justify-content: space-between;
-}
-
-.searchInput {
-  width: vh;
 }
 
 .Search {
@@ -106,55 +16,8 @@
   cursor: default;
 }
 
-.searchBar {
-  display: flex;
-  padding: 10px;
-  margin: 20px;
-}
-
-.moviesBar {
-  position: relative;
-  color: #333;
-  cursor: default;
-  display: inline-block;
-}
-
-.Ratings {
-  position: relative;
-  display: inline-block;
-}
-
-/*
-
-  line-height: 1.5;
-  font-size: 1rem;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 2px;
-  box-sizing: border-box;
-  cursor: default;
-  outline: none;
-  padding: 8px 52px 8px 10px;
-  transition: all 200ms ease;
-  width: 100%;
-
-
-*/
-
-.dropDownButton {
-  line-height: 1.5;
-  font-size: 1rem;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 2px;
-  box-sizing: border-box;
-  cursor: default;
-  outline: none;
-  padding: 8px 52px 8px 10px;
-  transition: all 200ms ease;
-  width: 100%;
-}
-.Main {
+.searchInput {
+  width: vh;
 }
 
 .searchInput input {
@@ -171,18 +34,71 @@
   width: 100%;
 }
 
-.moviesList {
+.moviesDropDown {
   display: block;
   background-color: #fff;
   border: 1px solid #ccc;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
   box-sizing: border-box;
-  margin-top: -1px;
-  max-height: 200px;
+  margin-top: 10px;
   overflow-y: auto;
   position: absolute;
   top: 100%;
   width: 100%;
   z-index: 1000;
-  -webkit-overflow-scrolling: touch;
+}
+
+.movieItem {
+  margin: 10px;
+  display: block;
+  text-align: left;
+}
+
+.movieItem:hover {
+  background-color: #f2f9fc;
+  color: #333;
+}
+
+.movieItemTitle {
+  display: flex;
+  justify-content: space-between;
+}
+
+.GreyText {
+  color: grey;
+}
+
+.FilterArea {
+  display: flex;
+  gap: 3.125vw;
+  width: 25vw;
+}
+
+.dropDownButton {
+  line-height: 1.5;
+  font-size: 1rem;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  box-sizing: border-box;
+  cursor: default;
+  outline: none;
+  padding: 8px 52px 8px 10px;
+  transition: all 200ms ease;
+  width: 100%;
+}
+
+.filterDropDown {
+  position: absolute;
+  align-self: left;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  width: full;
+  padding: 10px;
+  text-align: left;
+  margin-top: 10px;
+}
+
+.RatingCheckboxes {
+  display: flex;
 }

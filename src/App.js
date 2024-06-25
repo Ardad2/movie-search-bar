@@ -7,6 +7,7 @@ import StarHalfIcon from "@mui/icons-material/StarHalf";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 
 export default function App() {
+  //Function which represents a given rating in terms of stars.
   const starGenerate = (rating) => {
     const totalStars = 10;
     const activeStars = rating;
@@ -26,7 +27,11 @@ export default function App() {
     );
   };
 
+  //State to store the current searched query.
   const [query, setQuery] = useState("");
+
+  //The state with the data related to the movies.
+
   const [movies, setMovies] = useState([
     {
       title: "The Matrix",
@@ -55,24 +60,41 @@ export default function App() {
     },
   ]);
 
+  //State that stores the currently selected ratings (in terms of stars) for filtering. "0" represents "Any rating" which is the default value.
+
   const [currentRatings, setCurrentRatings] = useState([0]);
+
+  //This state is used to toggle open and close the dropdown for the rating filters.
+
   const [ratingsOpen, setRatingsOpen] = useState(false);
+
+  /*These are the different types of ratings that the user can filter with. "0" represents any rating,
+   and all other are the number of stars.*/
+
   const ratings = [
-    { id: 0, label: "Any rating" },
-    { id: 1, label: "*.          *********" },
-    { id: 2, label: "*.          *********" },
-    { id: 3, label: "*.          *********" },
-    { id: 4, label: "*.          *********" },
-    { id: 5, label: "*.          *********" },
-    { id: 6, label: "*.          *********" },
-    { id: 7, label: "*.          *********" },
-    { id: 8, label: "*.          *********" },
-    { id: 9, label: "*.          *********" },
-    { id: 10, label: "*.          *********" },
+    { id: 0 },
+    { id: 1 },
+    { id: 2 },
+    { id: 3 },
+    { id: 4 },
+    { id: 5 },
+    { id: 6 },
+    { id: 7 },
+    { id: 8 },
+    { id: 9 },
+    { id: 10 },
   ];
 
+  //State that stores the currently selected categories for filtering. "0" represents "Any category" which is the default value.
+
   const [currentCategories, setCurrentCategories] = useState([0]);
+
+  //This state is used to toggle open and close the dropdown for the categories filters.
+
   const [categoriesOpen, setCategoriesOpen] = useState(false);
+
+  /*These are the different types of categories that the user can filter with. "0" represents any rating,
+   and all other are the number of stars.*/
 
   const categories = [
     { id: 0, label: "Any genre" },
@@ -82,6 +104,10 @@ export default function App() {
     { id: 4, label: "Thriller" },
   ];
 
+  /*This is a categories map, which gives the ID for a given category. 
+  This is useful since the state which stores the filter options for categories stores IDs rather than strings.
+  */
+
   const categoriesMap = new Map();
 
   categoriesMap.set("Any genre", 0);
@@ -90,50 +116,78 @@ export default function App() {
   categoriesMap.set("Drama", 3);
   categoriesMap.set("Thriller", 4);
 
-  const dropDownShow = () => {
-    setCategoriesOpen(false);
-    setRatingsOpen(!ratingsOpen);
+  /*This function is used to toggle the drop down menue for the filters for Ratings and Categories.
+  It also closes the other type of drop-down if it is already open.
+  */
+
+  const dropDownShow = (type) => () => {
+    /*If the dropdown is for the Ratings, close the dropdown for Categories if it is open. 
+    Otherwise vice versa.*/
+
+    if (type == "ratings") {
+      setCategoriesOpen(false);
+      setRatingsOpen(!ratingsOpen);
+    } else {
+      setRatingsOpen(false);
+      setCategoriesOpen(!categoriesOpen);
+    }
   };
 
-  const dropDownShowGenre = () => {
-    setRatingsOpen(false);
-    setCategoriesOpen(!categoriesOpen);
-  };
+  //Change the ratings that are picked as filter.
+
   const ratingChange = (event) => {
     const ratingID = parseInt(event.target.value);
-    const choosen = event.target.checked;
+    const isChosen = event.target.checked;
 
-    if (choosen) {
+    //This is in the case where the current rating is being chosen after being unchecked.
+
+    if (isChosen) {
+      //If the ratingID is "0", it represents "Any rating".
       if (ratingID == 0) {
+        //If the rating chosen is "Any rating", then all other rating filters apart from 0 can be removed.
+
         setCurrentRatings([...currentRatings.filter((id) => id == -1), 0]);
       } else {
+        //If it is any other rating, add it to the current list of rating filters.
+
         setCurrentRatings([
           ...currentRatings.filter((id) => id !== 0),
           ratingID,
         ]);
       }
     } else {
+      //If a rating is being de-selected, remove it from the filter list.
+
       setCurrentRatings(currentRatings.filter((id) => id !== ratingID));
     }
   };
 
+  //Change the genre that are picked as filter.
+
   const genreChange = (event) => {
     const genreID = parseInt(event.target.value);
-    const choosen = event.target.checked;
+    const isChosen = event.target.checked;
 
-    if (choosen) {
+    //This is in the case where the current genre is being chosen after being unchecked.
+
+    if (isChosen) {
+      //If the genreID is "0", it represents "Any genre".
       if (genreID == 0) {
         setCurrentCategories([
           ...currentCategories.filter((id) => id == -1),
           0,
         ]);
       } else {
+        //If it is any other genre, add it to the current list of genre filters.
+
         setCurrentCategories([
           ...currentCategories.filter((id) => id !== 0),
           genreID,
         ]);
       }
     } else {
+      //If a genre is being de-selected, remove it from the filter list.
+
       setCurrentCategories(currentCategories.filter((id) => id !== genreID));
     }
   };
@@ -189,11 +243,11 @@ export default function App() {
               className="dropDownButton"
               type="button"
               id="multiSelectDropdown"
-              onClick={dropDownShow}
+              onClick={dropDownShow("ratings")}
             >
               Ratings
             </button>
-            <div class>
+            <div>
               {ratingsOpen && (
                 <div
                   aria-labelledby="multiSelectDropdown"
@@ -223,7 +277,7 @@ export default function App() {
               className="dropDownButton"
               type="button"
               id="multiSelectDropdown"
-              onClick={dropDownShowGenre}
+              onClick={dropDownShow("categories")}
             >
               Genres
             </button>
