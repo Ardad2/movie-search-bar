@@ -9,16 +9,24 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 export default function App() {
   //Function which represents a given rating in terms of stars.
 
+  /*Check if the remaining part of last star of the rating is less than 0.75.
+    If it is less than 0.75 we will need half star, otherwise round up to full star.
+  */
+
+  const checkPartialStars = (index, activeStars) => {
+    return index < activeStars && activeStars - index <= 0.75;
+  };
+
   const starGenerate = (rating) => {
     const totalStars = 10;
     const activeStars = rating;
 
     return (
       <div>
-        {/*. Iteratively, create a star for each number of the rating. 
-        Check if the remaining is less than 1.0, and in that case decide whether
-        to use half star or not. */}
-        {[...new Array(totalStars)].map((index) => {
+        {/*. Iteratively, create a star for each number of the rating. Check if
+        the remaining is less than 1.0, and in that case decide whether to use
+    half star or not. */}
+        {[...new Array(totalStars)].map((arr, index) => {
           return checkPartialStars(index, activeStars) ? (
             <StarHalfIcon />
           ) : index < activeStars ? (
@@ -29,14 +37,6 @@ export default function App() {
         })}
       </div>
     );
-  };
-
-  /*Check if the remaining part of last star of the rating is less than 0.75.
-    If it is less than 0.75 we will need half star, otherwise round up to full star.
-  */
-
-  const checkPartialStars = (index, activeStars) => {
-    return index < activeStars && activeStars - index <= 0.75;
   };
 
   //State to store the current searched query.
@@ -211,8 +211,7 @@ export default function App() {
 
   const containsRatingFilter = (rating) => {
     return (
-      currentRatings.includes(Math.floor(movie.rating)) ||
-      currentRatings.includes(0)
+      currentRatings.includes(Math.floor(rating)) || currentRatings.includes(0)
     );
   };
 
@@ -223,8 +222,8 @@ export default function App() {
 
   const containsCategoryFilter = (category) => {
     return (
-      currentRatings.includes(Math.floor(movie.category)) ||
-      currentRatings.includes(0)
+      currentCategories.includes(Math.floor(category)) ||
+      currentCategories.includes(0)
     );
   };
 
@@ -257,9 +256,6 @@ export default function App() {
                   }
                 }
               })
-
-              // After filtering the movies, now display the matching movies.
-
               .map((movie) => (
                 <div className="movieItem" key={movie.title}>
                   <div className="movieItemTitle">
